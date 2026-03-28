@@ -89,7 +89,7 @@ function crearFilaProducto(p) {
             ${foto}
             <div class="producto-fila-info">
                 <h3>${p.nombre || 'Sin nombre'}</h3>
-                <p>${p.codigo_barras || ''} · ${fecha}</p>
+                <p>${fecha}</p>
             </div>
             <div class="producto-fila-badges">
                 <span class="badge ${VALORACION_CLASE[p.valoracion]}">${VALORACION_TEXTO[p.valoracion]}</span>
@@ -112,6 +112,7 @@ document.getElementById('filtro-busqueda').addEventListener('input', () => {
 
 // === Modal de edición ===
 const modalEditar = document.getElementById('modal-editar');
+let rotacionActual = 0;
 
 function abrirModalEditar(producto) {
     document.getElementById('editar-id').value = producto.id;
@@ -121,13 +122,17 @@ function abrirModalEditar(producto) {
     document.getElementById('editar-revisado').checked = !producto.pendiente_revision;
     document.getElementById('editar-eliminar-foto').checked = false;
     document.getElementById('editar-foto-input').value = '';
+    rotacionActual = 0;
 
     // Foto actual
     const fotoActual = document.getElementById('editar-foto-actual');
+    const fotoAcciones = document.getElementById('editar-foto-acciones');
     if (producto.foto) {
-        fotoActual.innerHTML = `<img src="/uploads/${producto.foto}" style="max-width: 120px; border-radius: var(--radio);">`;
+        fotoActual.innerHTML = `<div id="editar-foto-marco" style="width: 120px; overflow: hidden; border-radius: var(--radio);"><img id="editar-foto-img" src="/uploads/${producto.foto}" style="width: 100%; display: block;"></div>`;
+        fotoAcciones.classList.remove('oculto');
     } else {
         fotoActual.innerHTML = '<span style="color: var(--color-texto-secundario); font-size: 0.85rem;">Sin foto</span>';
+        fotoAcciones.classList.add('oculto');
     }
 
     // Valoración
@@ -137,6 +142,24 @@ function abrirModalEditar(producto) {
 
     modalEditar.classList.remove('oculto');
 }
+
+// Botón rotar foto — siempre gira 90° sobre la imagen actual
+document.getElementById('btn-rotar-foto').addEventListener('click', () => {
+    rotacionActual = (rotacionActual + 90) % 360;
+    const img = document.getElementById('editar-foto-img');
+    if (!img) return;
+
+    const w = img.naturalWidth;
+    const h = img.naturalHeight;
+    const canvas = document.createElement('canvas');
+    canvas.width = h;
+    canvas.height = w;
+    const ctx = canvas.getContext('2d');
+    ctx.translate(h / 2, w / 2);
+    ctx.rotate(Math.PI / 2);
+    ctx.drawImage(img, -w / 2, -h / 2);
+    img.src = canvas.toDataURL('image/jpeg', 0.9);
+});
 
 function cerrarModalEditar() {
     modalEditar.classList.add('oculto');
@@ -168,6 +191,9 @@ document.getElementById('btn-guardar-editar').addEventListener('click', async ()
     formData.append('notas', document.getElementById('editar-notas').value);
     formData.append('pendiente_revision', document.getElementById('editar-revisado').checked ? '0' : '1');
     formData.append('eliminar_foto', document.getElementById('editar-eliminar-foto').checked ? 'true' : 'false');
+    if (rotacionActual > 0) {
+        formData.append('rotar', rotacionActual.toString());
+    }
 
     const fotoInput = document.getElementById('editar-foto-input');
     if (fotoInput.files[0]) {

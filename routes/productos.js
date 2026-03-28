@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 const db = require('../db/database');
@@ -92,7 +93,7 @@ router.post('/', (req, res) => {
 });
 
 // PUT /api/productos/:id — Editar producto (desde dashboard, requiere auth)
-router.put('/:id', requiereAuth, upload.single('foto'), (req, res) => {
+router.put('/:id', requiereAuth, upload.single('foto'), async (req, res) => {
     const { id } = req.params;
     const producto = db.prepare('SELECT * FROM productos WHERE id = ? AND eliminado = 0').get(id);
 
@@ -100,11 +101,10 @@ router.put('/:id', requiereAuth, upload.single('foto'), (req, res) => {
         return res.status(404).json({ error: 'Producto no encontrado' });
     }
 
-    const { nombre, codigo_barras, valoracion, notas, pendiente_revision, eliminar_foto } = req.body;
+    const { nombre, codigo_barras, valoracion, notas, pendiente_revision, eliminar_foto, rotar } = req.body;
 
     let foto = producto.foto;
     if (req.file) {
-        // Borrar foto anterior si existe
         if (producto.foto) {
             const rutaAnterior = path.join(UPLOADS_DIR, producto.foto);
             if (fs.existsSync(rutaAnterior)) fs.unlinkSync(rutaAnterior);
@@ -112,10 +112,26 @@ router.put('/:id', requiereAuth, upload.single('foto'), (req, res) => {
         foto = req.file.filename;
     } else if (eliminar_foto === 'true') {
         if (producto.foto) {
-            const rutaAnterior = path.join(__dirname, '..', 'uploads', producto.foto);
+            const rutaAnterior = path.join(UPLOADS_DIR, producto.foto);
             if (fs.existsSync(rutaAnterior)) fs.unlinkSync(rutaAnterior);
         }
         foto = null;
+    }
+
+    // Rotar foto existente
+    if (rotar && foto && !req.file) {
+        const grados = parseInt(rotar);
+        if ([90, 180, 270].includes(grados)) {
+            const rutaFoto = path.join(UPLOADS_DIR, foto);
+            const rutaTmp = rutaFoto + '.tmp.jpg';
+            try {
+                await sharp(rutaFoto).rotate(grados).toFile(rutaTmp);
+                fs.unlinkSync(rutaFoto);
+                fs.renameSync(rutaTmp, rutaFoto);
+            } catch (err) {
+                console.error('Error rotando foto:', err.message);
+            }
+        }
     }
 
     db.prepare(
