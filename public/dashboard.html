@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Esto me gusta</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="cabecera">
+        <h1>Esto me gusta</h1>
+        <nav>
+            <a href="/dashboard.html" class="activo">Dashboard</a>
+            <a href="/escaner.html">Escáner</a>
+        </nav>
+    </header>
+
+    <main class="contenedor">
+        <!-- Autenticación -->
+        <div id="auth-zona" style="margin-bottom: 1rem;">
+            <div id="auth-login" class="auth-inline">
+                <input type="password" id="auth-password" placeholder="Contraseña">
+                <button id="btn-login" class="btn btn-primario btn-pequeno">Entrar</button>
+            </div>
+            <div id="auth-logueado" class="oculto" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 0.85rem; color: var(--color-texto-secundario);">Modo administración</span>
+                <button id="btn-logout" class="btn btn-secundario btn-pequeno">Salir</button>
+            </div>
+        </div>
+
+        <!-- Pestañas -->
+        <div class="pestanas">
+            <button class="pestana activa" data-pestana="listado">Productos</button>
+            <button class="pestana" data-pestana="papelera">Papelera</button>
+        </div>
+
+        <!-- Pestaña: Listado -->
+        <section id="pestana-listado">
+            <div class="barra-filtros">
+                <input type="search" id="filtro-busqueda" placeholder="Buscar por nombre...">
+                <select id="filtro-valoracion">
+                    <option value="todos">Todas las valoraciones</option>
+                    <option value="me_gusta">Me gusta</option>
+                    <option value="pse">Psé</option>
+                    <option value="no_me_gusta">No me gusta</option>
+                </select>
+                <select id="filtro-revision">
+                    <option value="todos">Todos</option>
+                    <option value="pendientes">Pendientes</option>
+                    <option value="revisados">Revisados</option>
+                </select>
+                <select id="filtro-orden">
+                    <option value="fecha_alta-desc">Más recientes</option>
+                    <option value="fecha_alta-asc">Más antiguos</option>
+                    <option value="nombre-asc">Nombre A-Z</option>
+                    <option value="nombre-desc">Nombre Z-A</option>
+                </select>
+            </div>
+
+            <div id="lista-productos" class="tabla-productos"></div>
+            <div id="lista-vacia" class="estado-vacio oculto">
+                <p>No hay productos que mostrar</p>
+            </div>
+        </section>
+
+        <!-- Pestaña: Papelera -->
+        <section id="pestana-papelera" class="oculto">
+            <div id="papelera-acciones" class="oculto" style="margin-bottom: 1rem; text-align: right;">
+                <button id="btn-vaciar-papelera" class="btn btn-peligro btn-pequeno">
+                    Vaciar papelera
+                </button>
+            </div>
+            <div id="lista-papelera" class="tabla-productos"></div>
+            <div id="papelera-vacia" class="estado-vacio oculto">
+                <p>La papelera está vacía</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de edición -->
+    <div id="modal-editar" class="modal-fondo oculto">
+        <div class="modal">
+            <h2>Editar producto</h2>
+
+            <div class="campo">
+                <label for="editar-nombre">Nombre</label>
+                <input type="text" id="editar-nombre">
+            </div>
+
+            <div class="campo">
+                <label for="editar-codigo">Código de barras</label>
+                <input type="text" id="editar-codigo">
+            </div>
+
+            <div class="campo">
+                <label>Valoración</label>
+                <div id="editar-valoracion" class="valoracion-selector">
+                    <button type="button" data-valor="me_gusta">Me gusta</button>
+                    <button type="button" data-valor="pse">Psé</button>
+                    <button type="button" data-valor="no_me_gusta">No me gusta</button>
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="editar-notas">Notas</label>
+                <textarea id="editar-notas"></textarea>
+            </div>
+
+            <div class="campo">
+                <label>Foto</label>
+                <div id="editar-foto-actual" style="margin-bottom: 0.5rem;"></div>
+                <input type="file" id="editar-foto-input" accept="image/jpeg,image/png,image/webp,image/gif">
+                <label style="margin-top: 0.3rem;">
+                    <input type="checkbox" id="editar-eliminar-foto"> Eliminar foto actual
+                </label>
+            </div>
+
+            <div class="campo">
+                <label>
+                    <input type="checkbox" id="editar-revisado"> Marcado como revisado
+                </label>
+            </div>
+
+            <input type="hidden" id="editar-id">
+
+            <div class="modal-acciones">
+                <button id="btn-eliminar-producto" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                <div style="flex: 1;"></div>
+                <button id="btn-cancelar-editar" class="btn btn-secundario">Cancelar</button>
+                <button id="btn-guardar-editar" class="btn btn-primario">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

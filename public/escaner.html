@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escáner — Esto me gusta</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="cabecera">
+        <h1>Esto me gusta</h1>
+        <nav>
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/escaner.html" class="activo">Escáner</a>
+        </nav>
+    </header>
+
+    <main class="contenedor">
+        <!-- Estado: escaneando -->
+        <section id="seccion-escaner" class="escaner-contenedor">
+            <p style="color: var(--color-texto-secundario); font-size: 0.9rem;">
+                Apunta al código de barras del producto
+            </p>
+            <div id="lector" class="escaner-visor"></div>
+            <button id="btn-escanear" class="btn btn-primario btn-bloque" style="max-width: 400px;">
+                Activar cámara
+            </button>
+        </section>
+
+        <!-- Estado: producto encontrado (solo lectura) -->
+        <section id="seccion-encontrado" class="oculto">
+            <div class="ficha-producto tarjeta">
+                <img id="encontrado-foto" class="foto-producto oculto" alt="Foto del producto">
+                <div id="encontrado-foto-placeholder" class="foto-placeholder" style="margin: 0 auto 1rem;">
+                    Sin foto
+                </div>
+                <h2 id="encontrado-nombre"></h2>
+                <div id="encontrado-valoracion" style="margin: 0.5rem 0;"></div>
+                <p id="encontrado-notas" class="notas"></p>
+                <p id="encontrado-fecha" class="fecha"></p>
+            </div>
+            <button id="btn-volver-escaner" class="btn btn-secundario btn-bloque" style="margin-top: 1rem;">
+                Escanear otro
+            </button>
+        </section>
+
+        <!-- Estado: producto nuevo (formulario) -->
+        <section id="seccion-nuevo" class="oculto">
+            <div class="tarjeta">
+                <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">Nuevo producto</h2>
+
+                <div id="nuevo-foto-contenedor" class="oculto" style="text-align: center; margin-bottom: 1rem;">
+                    <img id="nuevo-foto-preview" class="foto-producto" alt="Foto del producto">
+                </div>
+
+                <div class="campo">
+                    <label for="nuevo-nombre">Nombre</label>
+                    <input type="text" id="nuevo-nombre" placeholder="Nombre del producto">
+                </div>
+
+                <div class="campo">
+                    <label>Valoración *</label>
+                    <div class="valoracion-selector">
+                        <button type="button" data-valor="me_gusta">Me gusta</button>
+                        <button type="button" data-valor="pse">Psé</button>
+                        <button type="button" data-valor="no_me_gusta">No me gusta</button>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label for="nuevo-notas">Notas</label>
+                    <textarea id="nuevo-notas" placeholder="Opcional"></textarea>
+                </div>
+
+                <input type="hidden" id="nuevo-codigo">
+                <input type="hidden" id="nuevo-foto">
+
+                <button id="btn-guardar" class="btn btn-primario btn-bloque" disabled>
+                    Guardar
+                </button>
+            </div>
+            <button id="btn-cancelar-nuevo" class="btn btn-secundario btn-bloque" style="margin-top: 0.75rem;">
+                Cancelar
+            </button>
+        </section>
+
+        <!-- Mensaje de éxito -->
+        <section id="seccion-guardado" class="oculto">
+            <div class="mensaje mensaje-exito" style="text-align: center; padding: 2rem 1rem;">
+                <p style="font-size: 1.2rem; font-weight: 600;">Producto guardado</p>
+            </div>
+            <button id="btn-volver-tras-guardar" class="btn btn-primario btn-bloque" style="margin-top: 1rem;">
+                Escanear otro
+            </button>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="/js/escaner.js"></script>
+</body>
+</html>

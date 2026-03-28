@@ -1,0 +1,545 @@
+/* === Variables === */
+:root {
+    --color-primario: #2d6a4f;
+    --color-primario-hover: #1b4332;
+    --color-fondo: #fafaf8;
+    --color-tarjeta: #ffffff;
+    --color-borde: #e0e0e0;
+    --color-texto: #1a1a1a;
+    --color-texto-secundario: #666;
+    --color-me-gusta: #2d6a4f;
+    --color-pse: #e89005;
+    --color-no-me-gusta: #c1292e;
+    --color-pendiente: #e89005;
+    --color-peligro: #c1292e;
+    --color-peligro-hover: #9e1b20;
+    --radio: 8px;
+    --sombra: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --sombra-elevada: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --max-ancho: 960px;
+    --transicion: 0.2s ease;
+}
+
+/* === Reset y base === */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* === Layout === */
+.contenedor {
+    max-width: var(--max-ancho);
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* === Cabecera === */
+.cabecera {
+    background: var(--color-primario);
+    color: white;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.cabecera h1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.cabecera nav {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.cabecera a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radio);
+    transition: background var(--transicion);
+}
+
+.cabecera a:hover,
+.cabecera a.activo {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+/* === Botones === */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: var(--radio);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--transicion), transform var(--transicion);
+    text-decoration: none;
+    line-height: 1;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-primario {
+    background: var(--color-primario);
+    color: white;
+}
+
+.btn-primario:hover {
+    background: var(--color-primario-hover);
+}
+
+.btn-peligro {
+    background: var(--color-peligro);
+    color: white;
+}
+
+.btn-peligro:hover {
+    background: var(--color-peligro-hover);
+}
+
+.btn-secundario {
+    background: var(--color-borde);
+    color: var(--color-texto);
+}
+
+.btn-secundario:hover {
+    background: #d0d0d0;
+}
+
+.btn-pequeno {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.85rem;
+}
+
+.btn-bloque {
+    width: 100%;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* === Formularios === */
+input[type="text"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: white;
+    transition: border-color var(--transicion);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-primario);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-texto-secundario);
+    margin-bottom: 0.3rem;
+}
+
+.campo {
+    margin-bottom: 1rem;
+}
+
+/* === Tarjeta === */
+.tarjeta {
+    background: var(--color-tarjeta);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 1rem;
+    box-shadow: var(--sombra);
+}
+
+/* === Valoraciones === */
+.valoracion-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.valoracion-selector button {
+    flex: 1;
+    padding: 0.6rem;
+    border: 2px solid var(--color-borde);
+    border-radius: var(--radio);
+    background: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transicion);
+    text-align: center;
+}
+
+.valoracion-selector button.seleccionado {
+    color: white;
+    border-color: transparent;
+}
+
+.valoracion-selector button[data-valor="me_gusta"].seleccionado {
+    background: var(--color-me-gusta);
+}
+
+.valoracion-selector button[data-valor="pse"].seleccionado {
+    background: var(--color-pse);
+}
+
+.valoracion-selector button[data-valor="no_me_gusta"].seleccionado {
+    background: var(--color-no-me-gusta);
+}
+
+/* === Badges === */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.badge-me-gusta {
+    background: #d4edda;
+    color: var(--color-me-gusta);
+}
+
+.badge-pse {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.badge-no-me-gusta {
+    background: #f8d7da;
+    color: var(--color-no-me-gusta);
+}
+
+.badge-pendiente {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* === Foto producto === */
+.foto-producto {
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radio);
+    background: #f0f0f0;
+}
+
+.foto-placeholder {
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    border-radius: var(--radio);
+    color: var(--color-texto-secundario);
+    font-size: 0.85rem;
+}
+
+/* === Tabla de productos (dashboard) === */
+.tabla-productos {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.producto-fila {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--color-tarjeta);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    cursor: pointer;
+    transition: box-shadow var(--transicion);
+}
+
+.producto-fila:hover {
+    box-shadow: var(--sombra-elevada);
+}
+
+.producto-fila-foto {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: calc(var(--radio) - 2px);
+    background: #f0f0f0;
+}
+
+.producto-fila-foto-placeholder {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    border-radius: calc(var(--radio) - 2px);
+    color: #ccc;
+    font-size: 1.5rem;
+}
+
+.producto-fila-info h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.producto-fila-info p {
+    font-size: 0.8rem;
+    color: var(--color-texto-secundario);
+}
+
+.producto-fila-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: flex-end;
+}
+
+/* === Filtros === */
+.barra-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.barra-filtros select,
+.barra-filtros input[type="search"] {
+    width: auto;
+    min-width: 140px;
+    flex: 1;
+}
+
+/* === Escáner === */
+.escaner-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.escaner-visor {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 4/3;
+    background: #000;
+    border-radius: var(--radio);
+    overflow: hidden;
+}
+
+.escaner-visor video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* === Ficha producto (vista móvil) === */
+.ficha-producto {
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+.ficha-producto .foto-producto {
+    margin: 0 auto 1rem;
+}
+
+.ficha-producto h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.ficha-producto .notas {
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+    margin: 0.75rem 0;
+    font-style: italic;
+}
+
+.ficha-producto .fecha {
+    font-size: 0.8rem;
+    color: var(--color-texto-secundario);
+}
+
+/* === Modal === */
+.modal-fondo {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 1rem;
+}
+
+.modal {
+    background: white;
+    border-radius: var(--radio);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--sombra-elevada);
+}
+
+.modal h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.modal-acciones {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+/* === Pestañas === */
+.pestanas {
+    display: flex;
+    border-bottom: 2px solid var(--color-borde);
+    margin-bottom: 1rem;
+}
+
+.pestana {
+    padding: 0.6rem 1rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-texto-secundario);
+    cursor: pointer;
+    transition: all var(--transicion);
+}
+
+.pestana.activa {
+    color: var(--color-primario);
+    border-bottom-color: var(--color-primario);
+}
+
+/* === Mensajes === */
+.mensaje {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radio);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.mensaje-info {
+    background: #e7f5ff;
+    color: #1864ab;
+}
+
+.mensaje-exito {
+    background: #d4edda;
+    color: var(--color-me-gusta);
+}
+
+.mensaje-error {
+    background: #f8d7da;
+    color: var(--color-no-me-gusta);
+}
+
+/* === Vacío === */
+.estado-vacio {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--color-texto-secundario);
+}
+
+.estado-vacio p {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* === Auth === */
+.auth-inline {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.auth-inline input {
+    width: 160px;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+}
+
+/* === Ocultar === */
+.oculto {
+    display: none !important;
+}
+
+/* === Responsive: escritorio === */
+@media (min-width: 768px) {
+    .contenedor {
+        padding: 1.5rem 2rem;
+    }
+
+    .producto-fila {
+        grid-template-columns: 80px 1fr auto auto;
+    }
+
+    .producto-fila-foto,
+    .producto-fila-foto-placeholder {
+        width: 80px;
+        height: 80px;
+    }
+
+    .barra-filtros {
+        flex-wrap: nowrap;
+    }
+}
