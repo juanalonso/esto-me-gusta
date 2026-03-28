@@ -12,6 +12,7 @@ const papeleraAcciones = document.getElementById('papelera-acciones');
 // === Textos y clases de valoración ===
 const VALORACION_TEXTO = { me_gusta: 'Me gusta', pse: 'Psé', no_me_gusta: 'No me gusta' };
 const VALORACION_CLASE = { me_gusta: 'badge-me-gusta', pse: 'badge-pse', no_me_gusta: 'badge-no-me-gusta' };
+const VALORACION_ICONO = { me_gusta: 'ti-thumb-up', pse: 'ti-minus', no_me_gusta: 'ti-thumb-down' };
 
 // === Pestañas ===
 document.querySelectorAll('.pestana').forEach(pestana => {
@@ -92,7 +93,7 @@ function crearFilaProducto(p) {
                 <p>${fecha}</p>
             </div>
             <div class="producto-fila-badges">
-                <span class="badge ${VALORACION_CLASE[p.valoracion]}">${VALORACION_TEXTO[p.valoracion]}</span>
+                <span class="badge ${VALORACION_CLASE[p.valoracion]}"><i class="ti ${VALORACION_ICONO[p.valoracion]}"></i> ${VALORACION_TEXTO[p.valoracion]}</span>
                 ${pendiente}
             </div>
         </div>

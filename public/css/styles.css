@@ -65,6 +65,11 @@ body {
     font-weight: 700;
 }
 
+.cabecera h1 .ti {
+    font-size: 2rem;
+    vertical-align: middle;
+}
+
 .cabecera-derecha {
     display: flex;
     align-items: center;
@@ -76,6 +81,11 @@ body {
     gap: 0.25rem;
 }
 
+.cabecera nav a .ti {
+    font-size: 1.1rem;
+    vertical-align: middle;
+}
+
 .btn-cabecera {
     background: var(--color-fondo);
     color: var(--color-texto-secundario);
@@ -85,6 +95,11 @@ body {
 .btn-cabecera:hover {
     background: var(--color-borde);
     color: var(--color-texto);
+}
+
+.btn-cabecera .ti {
+    font-size: 1.1rem;
+    vertical-align: middle;
 }
 
 .cabecera .auth-inline input {
@@ -238,6 +253,10 @@ label {
     background: white;
     font-family: inherit;
     font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
     font-weight: 600;
     cursor: pointer;
     transition: all var(--transicion);
@@ -260,6 +279,10 @@ label {
     color: var(--color-no-me-gusta);
 }
 
+.valoracion-selector button .ti {
+    font-size: 1.3rem;
+}
+
 .valoracion-selector button.seleccionado {
     color: white;
     border-color: transparent;
@@ -279,13 +302,19 @@ label {
 
 /* === Badges === */
 .badge {
-    display: inline-block;
-    padding: 0.15rem 0.55rem;
-    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 15px;
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+}
+
+.badge .ti {
+    font-size: 1rem;
 }
 
 .badge-me-gusta {
@@ -306,6 +335,20 @@ label {
 .badge-pendiente {
     background: var(--color-pse-fondo);
     color: #cc7700;
+}
+
+/* === Foto edición === */
+.editar-foto-layout {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.editar-foto-controles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: flex-start;
 }
 
 /* === Foto producto === */
@@ -340,7 +383,7 @@ label {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    padding: 1.5rem 0;
+    /* padding: 1.5rem 0; */
 }
 
 .escaner-contenedor > p {
@@ -442,6 +485,11 @@ label {
     border-bottom-color: var(--color-primario);
 }
 
+.pestana .ti {
+    font-size: 1.1rem;
+    vertical-align: middle;
+}
+
 /* === Filtros === */
 .barra-filtros {
     display: flex;
@@ -457,6 +505,28 @@ label {
     min-width: 140px;
     flex: 1;
     font-size: 0.85rem;
+}
+
+.busqueda-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 140px;
+}
+
+.busqueda-wrapper input[type="search"] {
+    width: 100%;
+    padding-left: 2rem;
+    box-sizing: border-box;
+}
+
+.busqueda-icono {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    pointer-events: none;
+    font-size: 1rem;
 }
 
 /* === Tabla de productos === */
