@@ -189,7 +189,8 @@ document.getElementById('btn-guardar').addEventListener('click', async () => {
         });
 
         if (resp.ok) {
-            mostrarSeccion(seccionGuardado);
+            reanudarEscaner();
+            mostrarToast('Producto guardado');
         } else {
             alert('Error al guardar. Inténtalo de nuevo.');
             btn.disabled = false;
@@ -202,6 +203,14 @@ document.getElementById('btn-guardar').addEventListener('click', async () => {
 
     btn.textContent = 'Guardar';
 });
+
+// === Toast ===
+function mostrarToast(texto) {
+    const toast = document.getElementById('toast');
+    toast.textContent = texto;
+    toast.classList.remove('oculto');
+    setTimeout(() => toast.classList.add('oculto'), 2500);
+}
 
 // === Botones de navegación ===
 document.getElementById('btn-volver-escaner').addEventListener('click', reanudarEscaner);

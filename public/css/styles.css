@@ -726,3 +726,24 @@ label {
         flex-wrap: nowrap;
     }
 }
+
+/* === Toast === */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-primario);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    z-index: 1000;
+    transition: opacity 0.3s;
+}
+.toast.oculto {
+    display: none;
+}
+
