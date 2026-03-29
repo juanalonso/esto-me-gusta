@@ -9,7 +9,7 @@
 </head>
 <body>
     <header class="cabecera">
-        <h1><i class="ti ti-tools-kitchen-2"></i> Esto me gusta</h1>
+        <h1><i class="ti ti-tools-kitchen-2"></i><span> Esto me gusta</span></h1>
         <div class="cabecera-derecha">
             <div id="auth-zona">
                 <div id="auth-login" class="auth-inline">
@@ -21,8 +21,8 @@
                 </div>
             </div>
             <nav>
-                <a href="/dashboard.html" class="activo"><i class="ti ti-list-details"></i> Dashboard</a>
-                <a href="/escaner.html"><i class="ti ti-camera"></i> Cámara</a>
+                <a href="/dashboard.html" class="activo"><i class="ti ti-list-details"></i><span> Dashboard</span></a>
+                <a href="/escaner.html"><i class="ti ti-camera"></i><span> Cámara</span></a>
             </nav>
         </div>
     </header>
@@ -69,14 +69,14 @@
 
         <!-- Pestaña: Papelera -->
         <section id="pestana-papelera" class="oculto">
-            <div id="papelera-acciones" class="oculto" style="margin-bottom: 1rem; text-align: right;">
-                <button id="btn-vaciar-papelera" class="btn btn-peligro btn-pequeno">
-                    Vaciar papelera
-                </button>
-            </div>
             <div id="lista-papelera" class="tabla-productos"></div>
             <div id="papelera-vacia" class="estado-vacio oculto">
                 <p>La papelera está vacía</p>
+            </div>
+            <div id="papelera-acciones" class="oculto" style="margin-top: 1rem; text-align: right;">
+                <button id="btn-vaciar-papelera" class="btn btn-peligro">
+                    Vaciar papelera
+                </button>
             </div>
         </section>
     </main>
@@ -135,7 +135,7 @@
             <input type="hidden" id="editar-id">
 
             <div class="modal-acciones">
-                <button id="btn-eliminar-producto" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                <button id="btn-eliminar-producto" class="btn btn-peligro ">Eliminar</button>
                 <div style="flex: 1;"></div>
                 <button id="btn-cancelar-editar" class="btn btn-secundario">Cancelar</button>
                 <button id="btn-guardar-editar" class="btn btn-primario">Guardar</button>

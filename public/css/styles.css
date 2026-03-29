@@ -127,6 +127,29 @@ body {
     background: rgba(45, 106, 79, 0.08);
 }
 
+@media (max-width: 600px) {
+    .cabecera h1 span {
+        display: none;
+    }
+
+    .cabecera h1 .ti {
+        font-size: 1.6rem;
+    }
+
+    .cabecera .auth-inline input {
+        width: 90px;
+        font-size: 0.75rem;
+    }
+
+    .cabecera nav a span {
+        display: none;
+    }
+
+    .cabecera nav a {
+        padding: 0.35rem 0.5rem;
+    }
+}
+
 /* === Botones === */
 .btn {
     display: inline-flex;

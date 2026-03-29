@@ -9,10 +9,10 @@
 </head>
 <body>
     <header class="cabecera">
-        <h1><i class="ti ti-tools-kitchen-2"></i> Esto me gusta</h1>
+        <h1><i class="ti ti-tools-kitchen-2"></i><span> Esto me gusta</span></h1>
         <nav>
-            <a href="/dashboard.html"><i class="ti ti-list-details"></i> Dashboard</a>
-            <a href="/escaner.html" class="activo"><i class="ti ti-camera"></i> Cámara</a>
+            <a href="/dashboard.html"><i class="ti ti-list-details"></i><span> Dashboard</span></a>
+            <a href="/escaner.html" class="activo"><i class="ti ti-camera"></i><span> Cámara</span></a>
         </nav>
     </header>
 
@@ -62,9 +62,9 @@
                 <div class="campo">
                     <label>Valoración *</label>
                     <div class="valoracion-selector">
-                        <button type="button" data-valor="me_gusta">Me gusta</button>
-                        <button type="button" data-valor="pse">Psé</button>
-                        <button type="button" data-valor="no_me_gusta">No me gusta</button>
+                        <button type="button" data-valor="me_gusta"><i class="ti ti-thumb-up"></i> Me gusta</button>
+                        <button type="button" data-valor="pse"><i class="ti ti-minus"></i> Psé</button>
+                        <button type="button" data-valor="no_me_gusta"><i class="ti ti-thumb-down"></i> No me gusta</button>
                     </div>
                 </div>
 
@@ -76,13 +76,11 @@
                 <input type="hidden" id="nuevo-codigo">
                 <input type="hidden" id="nuevo-foto">
 
-                <button id="btn-guardar" class="btn btn-primario btn-bloque" disabled>
-                    Guardar
-                </button>
+                <div class="modal-acciones">
+                    <button id="btn-cancelar-nuevo" class="btn btn-secundario">Cancelar</button>
+                    <button id="btn-guardar" class="btn btn-primario" disabled>Guardar</button>
+                </div>
             </div>
-            <button id="btn-cancelar-nuevo" class="btn btn-secundario btn-bloque" style="margin-top: 0.75rem;">
-                Cancelar
-            </button>
         </section>
 
         <!-- Mensaje de éxito -->
