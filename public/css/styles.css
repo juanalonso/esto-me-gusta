@@ -562,7 +562,7 @@ label {
     display: grid;
     grid-template-columns: 52px 1fr auto;
     gap: 0.75rem;
-    align-items: center;
+    align-items: start;
     padding: 0.65rem;
     background: var(--color-tarjeta);
     border-radius: var(--radio);

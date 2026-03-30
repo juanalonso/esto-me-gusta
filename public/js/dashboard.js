@@ -201,6 +201,10 @@ document.getElementById('btn-guardar-editar').addEventListener('click', async ()
         formData.append('foto', fotoInput.files[0]);
     }
 
+    const btnGuardar = document.getElementById('btn-guardar-editar');
+    btnGuardar.disabled = true;
+    document.body.style.cursor = 'wait';
+
     try {
         const resp = await fetch(`/api/productos/${id}`, {
             method: 'PUT',
@@ -216,6 +220,9 @@ document.getElementById('btn-guardar-editar').addEventListener('click', async ()
     } catch (error) {
         console.error('Error guardando edición:', error);
         alert('Error de conexión.');
+    } finally {
+        btnGuardar.disabled = false;
+        document.body.style.cursor = '';
     }
 });
 
