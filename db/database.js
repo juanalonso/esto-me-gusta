@@ -13,4 +13,10 @@ db.pragma('journal_mode = WAL');
 const schema = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf-8');
 db.exec(schema);
 
+// Migraciones incrementales
+const columnas = db.pragma('table_info(productos)').map(c => c.name);
+if (!columnas.includes('categoria_id')) {
+    db.exec('ALTER TABLE productos ADD COLUMN categoria_id INTEGER REFERENCES categorias(id) ON DELETE SET NULL');
+}
+
 module.exports = db;

@@ -28,28 +28,38 @@ function requiereAuth(req, res, next) {
 
 // GET /api/productos — Listar productos (no eliminados)
 router.get('/', (req, res) => {
-    const { orden, direccion, valoracion, revision, busqueda } = req.query;
+    const { orden, direccion, valoracion, revision, busqueda, categoria } = req.query;
 
-    let sql = 'SELECT * FROM productos WHERE eliminado = 0';
+    let sql = `SELECT p.*, c.nombre AS categoria_nombre
+               FROM productos p
+               LEFT JOIN categorias c ON p.categoria_id = c.id
+               WHERE p.eliminado = 0`;
     const params = [];
 
     if (valoracion && valoracion !== 'todos') {
-        sql += ' AND valoracion = ?';
+        sql += ' AND p.valoracion = ?';
         params.push(valoracion);
     }
 
     if (revision === 'pendientes') {
-        sql += ' AND pendiente_revision = 1';
+        sql += ' AND p.pendiente_revision = 1';
     } else if (revision === 'revisados') {
-        sql += ' AND pendiente_revision = 0';
+        sql += ' AND p.pendiente_revision = 0';
     }
 
     if (busqueda) {
-        sql += ' AND nombre LIKE ?';
+        sql += ' AND p.nombre LIKE ?';
         params.push(`%${busqueda}%`);
     }
 
-    const columnaOrden = orden === 'nombre' ? 'nombre' : 'fecha_alta';
+    if (categoria === 'sin_categoria') {
+        sql += ' AND p.categoria_id IS NULL';
+    } else if (categoria && categoria !== 'todas') {
+        sql += ' AND p.categoria_id = ?';
+        params.push(categoria);
+    }
+
+    const columnaOrden = orden === 'nombre' ? 'p.nombre' : 'p.fecha_alta';
     const dir = direccion === 'asc' ? 'ASC' : 'DESC';
     sql += ` ORDER BY ${columnaOrden} ${dir}`;
 
@@ -101,7 +111,7 @@ router.put('/:id', requiereAuth, upload.single('foto'), async (req, res) => {
         return res.status(404).json({ error: 'Producto no encontrado' });
     }
 
-    const { nombre, codigo_barras, valoracion, notas, pendiente_revision, eliminar_foto, rotar } = req.body;
+    const { nombre, codigo_barras, valoracion, notas, pendiente_revision, eliminar_foto, rotar, categoria_id } = req.body;
 
     let foto = producto.foto;
     if (req.file) {
@@ -136,7 +146,7 @@ router.put('/:id', requiereAuth, upload.single('foto'), async (req, res) => {
 
     db.prepare(
         `UPDATE productos SET nombre = ?, codigo_barras = ?, valoracion = ?, notas = ?,
-         foto = ?, pendiente_revision = ? WHERE id = ?`
+         foto = ?, pendiente_revision = ?, categoria_id = ? WHERE id = ?`
     ).run(
         nombre ?? producto.nombre,
         codigo_barras ?? producto.codigo_barras,
@@ -144,6 +154,7 @@ router.put('/:id', requiereAuth, upload.single('foto'), async (req, res) => {
         notas ?? producto.notas,
         foto,
         pendiente_revision !== undefined ? parseInt(pendiente_revision) : producto.pendiente_revision,
+        categoria_id !== undefined ? (categoria_id || null) : producto.categoria_id,
         id
     );
 

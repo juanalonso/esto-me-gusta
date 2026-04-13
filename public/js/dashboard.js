@@ -1,6 +1,7 @@
 // === Estado ===
 let productos = [];
 let productosEliminados = [];
+let categorias = [];
 
 // === Elementos ===
 const listaProductos = document.getElementById('lista-productos');
@@ -23,9 +24,11 @@ document.querySelectorAll('.pestana').forEach(pestana => {
         const target = pestana.dataset.pestana;
         document.getElementById('pestana-listado').classList.toggle('oculto', target !== 'listado');
         document.getElementById('pestana-papelera').classList.toggle('oculto', target !== 'papelera');
+        document.getElementById('pestana-categorias').classList.toggle('oculto', target !== 'categorias');
 
         if (target === 'papelera') cargarPapelera();
         if (target === 'listado') cargarProductos();
+        if (target === 'categorias') renderizarCategorias();
     });
 });
 
@@ -36,13 +39,15 @@ async function cargarProductos() {
     const valoracion = document.getElementById('filtro-valoracion').value;
     const revision = document.getElementById('filtro-revision').value;
     const busqueda = document.getElementById('filtro-busqueda').value;
+    const categoria = document.getElementById('filtro-categoria').value;
 
     const params = new URLSearchParams({
         orden: columna,
         direccion,
         valoracion,
         revision,
-        busqueda
+        busqueda,
+        categoria
     });
 
     try {
@@ -84,6 +89,9 @@ function crearFilaProducto(p) {
     const pendiente = p.pendiente_revision
         ? '<span class="badge badge-pendiente">Pendiente</span>'
         : '';
+    const categoriaBadge = p.categoria_nombre
+        ? `<span class="badge badge-categoria"><i class="ti ti-tag"></i> ${p.categoria_nombre}</span>`
+        : '';
 
     return `
         <div class="producto-fila" data-id="${p.id}" ${autenticado ? 'style="cursor:pointer"' : 'style="cursor:default"'}>
@@ -94,6 +102,7 @@ function crearFilaProducto(p) {
             </div>
             <div class="producto-fila-badges">
                 <span class="badge ${VALORACION_CLASE[p.valoracion]}"><i class="ti ${VALORACION_ICONO[p.valoracion]}"></i> ${VALORACION_TEXTO[p.valoracion]}</span>
+                ${categoriaBadge}
                 ${pendiente}
             </div>
         </div>
@@ -104,6 +113,175 @@ function crearFilaProducto(p) {
 document.getElementById('filtro-orden').addEventListener('change', cargarProductos);
 document.getElementById('filtro-valoracion').addEventListener('change', cargarProductos);
 document.getElementById('filtro-revision').addEventListener('change', cargarProductos);
+document.getElementById('filtro-categoria').addEventListener('change', cargarProductos);
+
+// === Categorías ===
+async function cargarCategorias() {
+    try {
+        const resp = await fetch('/api/categorias');
+        categorias = await resp.json();
+        poblarSelectCategorias();
+    } catch (error) {
+        console.error('Error cargando categorías:', error);
+    }
+}
+
+function poblarSelectCategorias() {
+    // Filtro del listado
+    const filtroCat = document.getElementById('filtro-categoria');
+    const valorActual = filtroCat.value;
+    filtroCat.innerHTML = '<option value="todas">Todas las categorías</option><option value="sin_categoria">Sin categoría</option>';
+    categorias.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.nombre;
+        filtroCat.appendChild(opt);
+    });
+    filtroCat.value = valorActual;
+
+    // Select del modal de edición
+    const editarCat = document.getElementById('editar-categoria');
+    const valorModal = editarCat.value;
+    editarCat.innerHTML = '<option value="">Sin categoría</option>';
+    categorias.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.nombre;
+        editarCat.appendChild(opt);
+    });
+    editarCat.value = valorModal;
+}
+
+function renderizarCategorias() {
+    const noAuth = document.getElementById('categorias-no-auth');
+    const contenido = document.getElementById('categorias-contenido');
+    if (!autenticado) {
+        noAuth.classList.remove('oculto');
+        contenido.classList.add('oculto');
+        return;
+    }
+    noAuth.classList.add('oculto');
+    contenido.classList.remove('oculto');
+
+    const lista = document.getElementById('lista-categorias');
+    if (categorias.length === 0) {
+        lista.innerHTML = '<p class="estado-vacio" style="padding: 1rem 0;">No hay categorías aún</p>';
+        return;
+    }
+
+    lista.innerHTML = categorias.map(c => `
+        <div class="categoria-fila" data-id="${c.id}">
+            <span class="categoria-nombre" data-id="${c.id}">${c.nombre}</span>
+            <div class="categoria-acciones">
+                <button class="btn btn-secundario btn-pequeno btn-editar-categoria" data-id="${c.id}" data-nombre="${c.nombre}">
+                    <i class="ti ti-pencil"></i>
+                </button>
+                <button class="btn btn-peligro btn-pequeno btn-borrar-categoria" data-id="${c.id}">
+                    <i class="ti ti-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+
+    lista.querySelectorAll('.btn-editar-categoria').forEach(btn => {
+        btn.addEventListener('click', () => iniciarEdicionCategoria(btn.dataset.id, btn.dataset.nombre));
+    });
+    lista.querySelectorAll('.btn-borrar-categoria').forEach(btn => {
+        btn.addEventListener('click', () => borrarCategoria(btn.dataset.id));
+    });
+}
+
+function iniciarEdicionCategoria(id, nombreActual) {
+    const fila = document.querySelector(`.categoria-fila[data-id="${id}"]`);
+    if (!fila) return;
+    fila.innerHTML = `
+        <input type="text" class="categoria-edit-input" value="${nombreActual}">
+        <div class="categoria-acciones">
+            <button class="btn btn-primario btn-pequeno btn-guardar-categoria" data-id="${id}">
+                <i class="ti ti-check"></i>
+            </button>
+            <button class="btn btn-secundario btn-pequeno btn-cancelar-edicion-categoria">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+    `;
+    fila.querySelector('.categoria-edit-input').focus();
+    fila.querySelector('.btn-guardar-categoria').addEventListener('click', () => {
+        const nuevoNombre = fila.querySelector('.categoria-edit-input').value.trim();
+        if (nuevoNombre) guardarEdicionCategoria(id, nuevoNombre);
+    });
+    fila.querySelector('.btn-cancelar-edicion-categoria').addEventListener('click', renderizarCategorias);
+    fila.querySelector('.categoria-edit-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            const nuevoNombre = fila.querySelector('.categoria-edit-input').value.trim();
+            if (nuevoNombre) guardarEdicionCategoria(id, nuevoNombre);
+        }
+        if (e.key === 'Escape') renderizarCategorias();
+    });
+}
+
+async function guardarEdicionCategoria(id, nombre) {
+    try {
+        const resp = await fetch(`/api/categorias/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre })
+        });
+        if (resp.ok) {
+            await cargarCategorias();
+            renderizarCategorias();
+        } else {
+            const err = await resp.json();
+            alert(err.error || 'Error al guardar');
+        }
+    } catch (error) {
+        console.error('Error editando categoría:', error);
+    }
+}
+
+async function borrarCategoria(id) {
+    if (!confirm('¿Borrar esta categoría? Los productos que la usen quedarán sin categoría.')) return;
+    try {
+        const resp = await fetch(`/api/categorias/${id}`, { method: 'DELETE' });
+        if (resp.ok) {
+            await cargarCategorias();
+            renderizarCategorias();
+            cargarProductos();
+        } else {
+            const err = await resp.json();
+            alert(err.error || 'Error al borrar');
+        }
+    } catch (error) {
+        console.error('Error borrando categoría:', error);
+    }
+}
+
+document.getElementById('btn-anadir-categoria').addEventListener('click', async () => {
+    const input = document.getElementById('nueva-categoria-nombre');
+    const nombre = input.value.trim();
+    if (!nombre) return;
+    try {
+        const resp = await fetch('/api/categorias', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre })
+        });
+        if (resp.ok) {
+            input.value = '';
+            await cargarCategorias();
+            renderizarCategorias();
+        } else {
+            const err = await resp.json();
+            alert(err.error || 'Error al añadir');
+        }
+    } catch (error) {
+        console.error('Error añadiendo categoría:', error);
+    }
+});
+
+document.getElementById('nueva-categoria-nombre').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-anadir-categoria').click();
+});
 
 let temporizadorBusqueda;
 document.getElementById('filtro-busqueda').addEventListener('input', () => {
@@ -140,6 +318,9 @@ function abrirModalEditar(producto) {
     document.querySelectorAll('#editar-valoracion button').forEach(btn => {
         btn.classList.toggle('seleccionado', btn.dataset.valor === producto.valoracion);
     });
+
+    // Categoría
+    document.getElementById('editar-categoria').value = producto.categoria_id || '';
 
     modalEditar.classList.remove('oculto');
 }
@@ -192,6 +373,7 @@ document.getElementById('btn-guardar-editar').addEventListener('click', async ()
     formData.append('notas', document.getElementById('editar-notas').value);
     formData.append('pendiente_revision', document.getElementById('editar-revisado').checked ? '0' : '1');
     formData.append('eliminar_foto', document.getElementById('editar-eliminar-foto').checked ? 'true' : 'false');
+    formData.append('categoria_id', document.getElementById('editar-categoria').value);
     if (rotacionActual > 0) {
         formData.append('rotar', rotacionActual.toString());
     }
@@ -323,7 +505,11 @@ document.getElementById('btn-vaciar-papelera').addEventListener('click', async (
 // === Reaccionar a cambios de auth ===
 document.addEventListener('auth-cambiado', () => {
     cargarProductos();
+    // Si la pestaña de categorías está activa, refrescar
+    if (document.querySelector('.pestana[data-pestana="categorias"]')?.classList.contains('activa')) {
+        renderizarCategorias();
+    }
 });
 
 // === Carga inicial ===
-cargarProductos();
+cargarCategorias().then(() => cargarProductos());

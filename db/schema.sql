@@ -1,3 +1,8 @@
+CREATE TABLE IF NOT EXISTS categorias (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS productos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     codigo_barras TEXT,
@@ -7,5 +12,6 @@ CREATE TABLE IF NOT EXISTS productos (
     notas TEXT DEFAULT '',
     fecha_alta DATETIME DEFAULT CURRENT_TIMESTAMP,
     pendiente_revision INTEGER DEFAULT 1,
-    eliminado INTEGER DEFAULT 0
+    eliminado INTEGER DEFAULT 0,
+    categoria_id INTEGER REFERENCES categorias(id) ON DELETE SET NULL
 );

@@ -35,6 +35,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/productos', require('./routes/productos'));
 app.use('/api/papelera', require('./routes/papelera'));
+app.use('/api/categorias', require('./routes/categorias'));
 
 app.listen(PORT, () => {
     console.log(`Servidor arrancado en http://localhost:${PORT}`);

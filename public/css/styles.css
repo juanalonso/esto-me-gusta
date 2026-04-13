@@ -360,6 +360,11 @@ label {
     color: #cc7700;
 }
 
+.badge-categoria {
+    background: #e8f0fe;
+    color: #3a5fc8;
+}
+
 /* === Foto edición === */
 .editar-foto-layout {
     display: flex;
@@ -703,6 +708,46 @@ label {
     display: none !important;
 }
 
+/* === Categorías gestión === */
+.barra-nueva-categoria {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.barra-nueva-categoria input {
+    flex: 1;
+}
+
+.categoria-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radio);
+    border: 1px solid var(--color-borde);
+    margin-bottom: 0.5rem;
+    background: var(--color-fondo);
+}
+
+.categoria-fila:hover {
+    background: var(--color-fondo-hover, #f5f5f5);
+}
+
+.categoria-nombre {
+    font-size: 0.95rem;
+}
+
+.categoria-acciones {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.categoria-edit-input {
+    flex: 1;
+    margin-right: 0.5rem;
+}
+
 /* === Responsive: escritorio === */
 @media (min-width: 768px) {
     .contenedor {
@@ -725,7 +770,7 @@ label {
 
     .barra-filtros {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 2fr repeat(4, 1fr);
     }
 
     .barra-filtros select,
