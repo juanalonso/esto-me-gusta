@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse — Esto me gusta</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="browse-pagina">
+    <header class="cabecera">
+        <h1><i class="ti ti-tools-kitchen-2"></i><span> Esto me gusta</span></h1>
+        <nav>
+            <a href="/dashboard.html"><i class="ti ti-list-details"></i><span> Dashboard</span></a>
+            <a href="/browse.html" class="activo"><i class="ti ti-carousel-horizontal"></i><span> Browse</span></a>
+            <a href="/escaner.html"><i class="ti ti-camera"></i><span> Cámara</span></a>
+        </nav>
+    </header>
+
+    <main class="browse-main">
+        <div class="browse-busqueda">
+            <div class="busqueda-wrapper">
+                <i class="ti ti-barcode busqueda-icono"></i>
+                <input type="search" id="browse-codigo" placeholder="Código de barras..." inputmode="numeric">
+            </div>
+            <button id="browse-btn-buscar" class="btn btn-primario btn-pequeno">
+                <i class="ti ti-search"></i>
+            </button>
+        </div>
+
+        <div id="browse-categorias" class="browse-chips"></div>
+
+        <div id="browse-carrusel" class="browse-carrusel">
+            <div id="browse-card" class="browse-card"></div>
+        </div>
+    </main>
+
+    <script src="/js/browse.js"></script>
+</body>
+</html>
