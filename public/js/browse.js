@@ -10,7 +10,7 @@ const VALORACION_ICONO = { me_gusta: 'ti-thumb-up', pse: 'ti-minus', no_me_gusta
 
 const card = document.getElementById('browse-card');
 const chipsContainer = document.getElementById('browse-categorias');
-const inputCodigo = document.getElementById('browse-codigo');
+// const inputCodigo = document.getElementById('browse-codigo'); // buscador por código comentado
 
 // === Carga inicial ===
 async function init() {
@@ -53,7 +53,7 @@ function renderizarChips() {
     chipsContainer.querySelectorAll('.browse-chip').forEach(chip => {
         chip.addEventListener('click', async () => {
             categoriaActiva = chip.dataset.cat;
-            inputCodigo.value = '';
+            // inputCodigo.value = ''; // limpiar buscador por código al cambiar categoría
             await cargarProductos();
             renderizarChips();
             renderizarCard();
@@ -110,42 +110,39 @@ function renderizarCard() {
     });
 }
 
-// === Búsqueda por código de barras ===
-document.getElementById('browse-btn-buscar').addEventListener('click', buscarPorCodigo);
-inputCodigo.addEventListener('keydown', e => {
-    if (e.key === 'Enter') buscarPorCodigo();
-});
-
-async function buscarPorCodigo() {
-    const codigo = inputCodigo.value.trim();
-    if (!codigo) {
-        await cargarProductos();
-        renderizarCard();
-        return;
-    }
-
-    try {
-        const resp = await fetch(`/api/productos/buscar/${encodeURIComponent(codigo)}`);
-        const data = await resp.json();
-
-        if (data.encontrado) {
-            productos = [data.producto];
-            indiceActual = 0;
-            // Deseleccionar chips visualmente
-            chipsContainer.querySelectorAll('.browse-chip').forEach(c => c.classList.remove('activo'));
-            renderizarCard();
-        } else {
-            card.innerHTML = `
-                <div class="browse-vacio">
-                    <i class="ti ti-barcode-off" style="font-size: 3rem; color: var(--color-borde);"></i>
-                    <p>Producto no encontrado</p>
-                    <p class="browse-vacio-sub">${codigo}</p>
-                </div>`;
-        }
-    } catch (e) {
-        console.error('Error buscando por código:', e);
-    }
-}
+// === Búsqueda por código de barras — desactivada temporalmente, puede ser útil en el futuro ===
+// document.getElementById('browse-btn-buscar').addEventListener('click', buscarPorCodigo);
+// inputCodigo.addEventListener('keydown', e => {
+//     if (e.key === 'Enter') buscarPorCodigo();
+// });
+//
+// async function buscarPorCodigo() {
+//     const codigo = inputCodigo.value.trim();
+//     if (!codigo) {
+//         await cargarProductos();
+//         renderizarCard();
+//         return;
+//     }
+//     try {
+//         const resp = await fetch(`/api/productos/buscar/${encodeURIComponent(codigo)}`);
+//         const data = await resp.json();
+//         if (data.encontrado) {
+//             productos = [data.producto];
+//             indiceActual = 0;
+//             chipsContainer.querySelectorAll('.browse-chip').forEach(c => c.classList.remove('activo'));
+//             renderizarCard();
+//         } else {
+//             card.innerHTML = `
+//                 <div class="browse-vacio">
+//                     <i class="ti ti-barcode-off" style="font-size: 3rem; color: var(--color-borde);"></i>
+//                     <p>Producto no encontrado</p>
+//                     <p class="browse-vacio-sub">${codigo}</p>
+//                 </div>`;
+//         }
+//     } catch (e) {
+//         console.error('Error buscando por código:', e);
+//     }
+// }
 
 // === Swipe táctil ===
 let touchStartX = 0;
@@ -174,6 +171,17 @@ carrusel.addEventListener('touchend', e => {
         renderizarCard();
     }
 }, { passive: true });
+
+// === Navegación con teclado ===
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && indiceActual < productos.length - 1) {
+        indiceActual++;
+        renderizarCard();
+    } else if (e.key === 'ArrowLeft' && indiceActual > 0) {
+        indiceActual--;
+        renderizarCard();
+    }
+});
 
 // === Arranque ===
 init();
